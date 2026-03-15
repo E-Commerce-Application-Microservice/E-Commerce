@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProduct, getSimilarProducts, getReviews, getAverageRating } from '../api';
+import { getProduct, getSimilarProducts, getReviews, getAverageRating, submitReview } from '../api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { FiStar, FiHeart, FiShoppingCart, FiTruck, FiShield, FiClock } from 'react-icons/fi';
@@ -273,7 +273,15 @@ export default function ProductDetail() {
               })}
             </div>
             
-            <button className="w-full btn-secondary mt-8 border-purple-500/30 text-purple-300 hover:text-white">
+            <button onClick={() => {
+              const reviewText = window.prompt("Write your review:");
+              const ratingText = window.prompt("Rate 1-5:");
+              if(reviewText && ratingText && !isNaN(ratingText)) {
+                submitReview({ productId: product._id, userId: user?.id || 'anonymous', userName: user?.name || 'Anonymous User', rating: Number(ratingText), review: reviewText })
+                  .then(() => { toast.success('Review submitted!'); setTimeout(() => window.location.reload(), 1000); })
+                  .catch(err => toast.error(err.response?.data?.error || 'Failed to submit review'));
+              }
+            }} className="w-full btn-secondary mt-8 border-purple-500/30 text-purple-300 hover:text-white">
               Write a Review
             </button>
           </div>

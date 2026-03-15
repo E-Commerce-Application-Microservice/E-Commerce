@@ -86,6 +86,23 @@ app.put('/orders/:orderId/status', async (req, res) => {
     if (paymentStatus) update.paymentStatus = paymentStatus;
     if (paymentId) update.paymentId = paymentId;
     const order = await Order.findByIdAndUpdate(req.params.orderId, update, { new: true });
+    
+    // Process invoice and shipping asynchronously when paid
+    if (status === 'confirmed' && paymentStatus === 'paid') {
+      const axios = require('axios');
+      // Generate Invoice
+      axios.post('http://invoice-service:3010/invoices/generate', { 
+        orderId: order._id, userId: order.userId 
+      }).catch(e => console.error('Invoice generation failed:', e.message));
+      
+      // Create Shipping Item
+      axios.post('http://shipping-service:3011/shipping', {
+        orderId: order._id, userId: order.userId, 
+        estimatedDelivery: order.estimatedDelivery, 
+        shippingAddress: order.shippingAddress
+      }).catch(e => console.error('Shipping generation failed:', e.message));
+    }
+
     res.json({ message: 'Order updated', order });
   } catch (err) { res.status(500).json({ error: err.message }); }
 });

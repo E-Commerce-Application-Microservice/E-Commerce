@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { getOrders } from '../api';
+import { getOrders, getShipping, getInvoice } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { FiPackage, FiTruck, FiCheckCircle } from 'react-icons/fi';
+import toast from 'react-hot-toast';
 
 export default function OrderHistory() {
   const { user } = useAuth();
@@ -19,6 +20,24 @@ export default function OrderHistory() {
       });
     }
   }, [user]);
+
+  const handleTrackPackage = async (orderId) => {
+    try {
+      const res = await getShipping(orderId);
+      toast.success(`Tracking: ${res.data.trackingNumber}\nStatus: ${res.data.status}`, {duration: 5000});
+    } catch (err) {
+      toast.error('Tracking info not available yet');
+    }
+  };
+
+  const handleViewInvoice = async (orderId) => {
+    try {
+      const res = await getInvoice(orderId);
+      toast.success(`Invoice: ${res.data.invoiceNumber}\nTotal: $${res.data.totalAmount}`, {duration: 5000});
+    } catch (err) {
+      toast.error('Invoice not available yet');
+    }
+  };
 
   const getStatusColor = (status) => {
     switch(status.toLowerCase()) {
@@ -64,7 +83,7 @@ export default function OrderHistory() {
                     <p className="font-medium text-white">${order.totalAmount?.toFixed(2)}</p>
                   </div>
                   <div>
-                    <p className="text-gray-400 mb-1 uppercase text-xs tracking-wider">Order ID</p>
+                    <p className="text-gray-400 mb-1 uppercase text-xs tracking-wider">Order ID <span className="text-[10px] text-purple-400 cursor-pointer ml-1" onClick={() => handleViewInvoice(order._id)}>(View Invoice)</span></p>
                     <p className="font-medium text-white font-mono">{order._id.substring(0, 8)}...</p>
                   </div>
                 </div>
@@ -96,7 +115,7 @@ export default function OrderHistory() {
                      <div className="flex items-center gap-2 text-purple-400">
                        <FiTruck /> <span className="text-gray-300">Est. Delivery:</span> <span className="font-semibold text-white">{new Date(order.estimatedDelivery).toLocaleDateString()}</span>
                      </div>
-                     <button className="text-pink-400 hover:text-pink-300 font-medium transition-colors ml-auto">Track Package</button>
+                     <button onClick={() => handleTrackPackage(order._id)} className="text-pink-400 hover:text-pink-300 font-medium transition-colors ml-auto">Track Package</button>
                    </div>
                 )}
               </div>
