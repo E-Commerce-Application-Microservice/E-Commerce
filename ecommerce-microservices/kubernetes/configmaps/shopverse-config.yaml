@@ -29,6 +29,6 @@ data:
   PAYMENT_SERVICE_URL: "http://payment-service:3009"
   INVOICE_SERVICE_URL: "http://invoice-service:3010"
   SHIPPING_SERVICE_URL: "http://shipping-service:3011"
-  REVIEW_SERVICE_URL: "http://review-service:3012"
+  REVIEW_SERVICE_URL: "http://review-rating-service:3012"
   RECOMMENDATION_SERVICE_URL: "http://recommendation-service:3013"
   ADMIN_SERVICE_URL: "http://admin-service:3014"

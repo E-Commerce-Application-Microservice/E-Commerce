@@ -276,7 +276,7 @@ export default function ProductDetail() {
             
             <div className="space-y-3">
               {[5,4,3,2,1].map(stars => {
-                const count = ratingStats.distribution[stars] || 0;
+                const count = ratingStats.distribution?.[stars] || 0;
                 const percent = ratingStats.count > 0 ? (count / ratingStats.count) * 100 : 0;
                 return (
                   <div key={stars} className="flex items-center gap-3 text-sm">
