@@ -106,16 +106,21 @@ export default function ProductList() {
             {/* Sort */}
             <div className="mb-6">
               <h4 className="font-semibold text-gray-300 mb-3 uppercase text-xs tracking-wider">Sort By</h4>
-              <select 
-                value={activeFilters.sort}
-                onChange={e => handleFilterChange('sort', e.target.value)}
-                className="input-field py-2 text-sm"
-              >
-                <option value="newest">Newest Arrivals</option>
-                <option value="price_asc">Price: Low to High</option>
-                <option value="price_desc">Price: High to Low</option>
-                <option value="rating">Top Rated</option>
-              </select>
+              <div className="relative">
+                <select 
+                  value={activeFilters.sort}
+                  onChange={e => handleFilterChange('sort', e.target.value)}
+                  className="w-full bg-[#1a1a2e]/60 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-purple-500/50 focus:ring-1 focus:ring-purple-500 transition-all appearance-none cursor-pointer hover:border-white/20"
+                >
+                  <option value="newest" className="bg-[#1a1a2e] text-white py-2">Newest Arrivals</option>
+                  <option value="price_asc" className="bg-[#1a1a2e] text-white py-2">Price: Low to High</option>
+                  <option value="price_desc" className="bg-[#1a1a2e] text-white py-2">Price: High to Low</option>
+                  <option value="rating" className="bg-[#1a1a2e] text-white py-2">Top Rated</option>
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-400">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+              </div>
             </div>
             
             <button 
