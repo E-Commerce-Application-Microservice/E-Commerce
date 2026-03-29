@@ -2,7 +2,7 @@
 set -e
 
 # Define your Docker Hub username here.
-DOCKER_USERNAME="team4ofdevops"
+DOCKER_USERNAME="team4devops"
 
 # List of microservices to build and push
 MICROSERVICES=(
